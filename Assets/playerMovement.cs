@@ -10,9 +10,20 @@
      private float turner;
      private float looker;
      public float sensitivity = 5;
-     
-     // Use this for initialization
-     void Start () {
+
+      public float smooth = 1f;
+
+     private Vector3 targetAngles;
+
+    [SerializeField]
+
+    Animator anim;
+
+    [SerializeField]
+    GameObject animm;
+
+    // Use this for initialization
+    void Start () {
          
      }
      
@@ -31,6 +42,50 @@
           //       moveDirection.y = jumpSpeed;
              
          }
+
+         if(Input.GetAxis("Horizontal") > 0 && Input.GetAxis("Vertical") == 0){
+            anim.SetBool("IsDown", false);
+             anim.SetBool("IsUp", false);
+             anim.SetBool("IsIdle", false);
+            anim.SetBool("IsWalkLeft", false); //set to right
+            anim.SetBool("IsWalkRight", true);
+
+                targetAngles = transform.eulerAngles + 180f * Vector3.up; // what the new angles should be
+     
+     animm.transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, targetAngles, 0.01f); 
+            
+         }else if(Input.GetAxis("Horizontal") < 0 && Input.GetAxis("Vertical") == 0){
+            anim.SetBool("IsDown", false);
+             anim.SetBool("IsUp", false);
+            anim.SetBool("IsIdle", false);
+            anim.SetBool("IsWalkRight", false);
+                anim.SetBool("IsWalkLeft", true); //set to right
+                    targetAngles = transform.eulerAngles + 180f * Vector3.up; // what the new angles should be
+     
+     animm.transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, targetAngles, 0.01f); 
+            
+        }
+         else if(Input.GetAxis("Vertical") > 0 && Input.GetAxis("Horizontal") == 0){
+        anim.SetBool("IsIdle", false);
+        anim.SetBool("IsWalkRight", false); //set to right
+        anim.SetBool("IsWalkLeft", false);
+        anim.SetBool("IsDown", false);
+        anim.SetBool("IsUp", true);
+         }
+        else if(Input.GetAxis("Vertical") < 0 && Input.GetAxis("Horizontal") == 0){
+        anim.SetBool("IsIdle", false);
+        anim.SetBool("IsWalkLeft", false);
+        anim.SetBool("IsWalkRight", false); //set to right
+        anim.SetBool("IsUp", false);
+        anim.SetBool("IsDown", true);
+         }else if(Input.GetAxis("Vertical") == 0){
+            anim.SetBool("IsDown", false);
+             anim.SetBool("IsUp", false);
+             anim.SetBool("IsWalkLeft", false);
+            anim.SetBool("IsWalkRight", false); //set to right
+            anim.SetBool("IsIdle", true);
+         }
+         
          /*
          turner = Input.GetAxis ("Mouse X")* sensitivity;
          looker = -Input.GetAxis ("Mouse Y")* sensitivity;
