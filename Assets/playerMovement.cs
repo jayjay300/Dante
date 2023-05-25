@@ -1,6 +1,7 @@
  using System.Collections;
  using System.Collections.Generic;
- using UnityEngine;
+using TMPro;
+using UnityEngine;
  
  public class playerMovement : MonoBehaviour {
      public float speed = 25.0F;
@@ -15,6 +16,8 @@
 
      private Vector3 targetAngles;
 
+    private bool isStartInteraction=true;
+
     [SerializeField]
 
     Animator anim;
@@ -22,14 +25,34 @@
     [SerializeField]
     GameObject animm;
 
+    [SerializeField]
+    GameObject meshRend;
+
+
+    public Vector3 targetAngle = new Vector3(0f, 0f, 0f);
+ 
+     private Vector3 currentAngle;
+
+
     // Use this for initialization
     void Start () {
-         
+           currentAngle = transform.eulerAngles;
      }
      
      // Update is called once per frame
      void Update () {
-         CharacterController controller = GetComponent<CharacterController>();
+
+        if (currentAngle != targetAngle)
+        {
+            currentAngle = new Vector3(
+        Mathf.LerpAngle(currentAngle.x, targetAngle.x, Time.deltaTime),
+        Mathf.LerpAngle(currentAngle.y, targetAngle.y, Time.deltaTime),
+        Mathf.LerpAngle(currentAngle.z, targetAngle.z, Time.deltaTime));
+
+            transform.eulerAngles = currentAngle;
+        }
+
+        CharacterController controller = GetComponent<CharacterController>();
          // is the controller on the ground?
          if (controller.isGrounded) {
              //Feed moveDirection with input.
@@ -43,7 +66,12 @@
              
          }
 
-         if(Input.GetAxis("Horizontal") > 0 && Input.GetAxis("Vertical") == 0){
+         if(Input.GetKeyDown(KeyCode.Space)){
+
+            isStartInteraction = ItemInteract(isStartInteraction);
+        }
+
+         if(Input.GetAxis("Horizontal") > 0){
             anim.SetBool("IsDown", false);
              anim.SetBool("IsUp", false);
              anim.SetBool("IsIdle", false);
@@ -54,7 +82,7 @@
      
      animm.transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, targetAngles, 0.01f); 
             
-         }else if(Input.GetAxis("Horizontal") < 0 && Input.GetAxis("Vertical") == 0){
+         }else if(Input.GetAxis("Horizontal") < 0){
             anim.SetBool("IsDown", false);
              anim.SetBool("IsUp", false);
             anim.SetBool("IsIdle", false);
@@ -65,14 +93,14 @@
      animm.transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, targetAngles, 0.01f); 
             
         }
-         else if(Input.GetAxis("Vertical") > 0 && Input.GetAxis("Horizontal") == 0){
+         else if(Input.GetAxis("Vertical") > 0){
         anim.SetBool("IsIdle", false);
         anim.SetBool("IsWalkRight", false); //set to right
         anim.SetBool("IsWalkLeft", false);
         anim.SetBool("IsDown", false);
         anim.SetBool("IsUp", true);
          }
-        else if(Input.GetAxis("Vertical") < 0 && Input.GetAxis("Horizontal") == 0){
+        else if(Input.GetAxis("Vertical") < 0){
         anim.SetBool("IsIdle", false);
         anim.SetBool("IsWalkLeft", false);
         anim.SetBool("IsWalkRight", false); //set to right
@@ -86,21 +114,25 @@
             anim.SetBool("IsIdle", true);
          }
          
-         /*
-         turner = Input.GetAxis ("Mouse X")* sensitivity;
-         looker = -Input.GetAxis ("Mouse Y")* sensitivity;
-         if(turner != 0){
-             //Code for action on mouse moving right
-             transform.eulerAngles += new Vector3 (0,turner,0);
-         }
-         if(looker != 0){
-             //Code for action on mouse moving right
-             transform.eulerAngles += new Vector3 (looker,0,0);
-         }
-         */
          //Applying gravity to the controller
          moveDirection.y -= gravity * Time.deltaTime;
          //Making the character move
          controller.Move(moveDirection * Time.deltaTime);
      }
+
+
+     bool ItemInteract(bool start){
+            meshRend.SetActive(start);
+        if(start){
+            targetAngle= new Vector3(0f, 90f, 0f);
+        }else{
+            targetAngle= new Vector3(0f, 0f, 0f);
+        }
+        return !start;
+
+    }
+
+    private void OnTriggerEnter(Collider other) {
+      //  meshRend.GetComponent<TextMeshPro>().text = "assbubble toohoot";
+    }
  }
