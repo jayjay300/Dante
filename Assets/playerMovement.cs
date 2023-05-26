@@ -26,23 +26,28 @@ using UnityEngine;
     GameObject animm;
 
     [SerializeField]
-    GameObject meshRend;
+    GameObject meshRend,Camera;
 
 
     public Vector3 targetAngle = new Vector3(0f, 0f, 0f);
- 
+    public Vector3 targetPosition = new Vector3(0.582796f,1.179629f,-1.670381f);
+    public Vector3 originalPosition = new Vector3(0.582796f,1.179629f,-1.670381f);
      private Vector3 currentAngle;
+    private Vector3 currentPosition;
 
 
     // Use this for initialization
     void Start () {
            currentAngle = transform.eulerAngles;
-     }
+            currentPosition = Camera.transform.localPosition;
+        originalPosition = currentPosition;
+        targetPosition = originalPosition;
+    }
      
      // Update is called once per frame
      void Update () {
 
-        if (currentAngle != targetAngle)
+       if (currentAngle != targetAngle)
         {
             currentAngle = new Vector3(
         Mathf.LerpAngle(currentAngle.x, targetAngle.x, Time.deltaTime),
@@ -50,7 +55,16 @@ using UnityEngine;
         Mathf.LerpAngle(currentAngle.z, targetAngle.z, Time.deltaTime));
 
             transform.eulerAngles = currentAngle;
-        }
+        } 
+
+        if(currentPosition != targetPosition){
+    currentPosition = new Vector3(
+        Mathf.Lerp(currentPosition.x, targetPosition.x, Time.deltaTime),
+        Mathf.Lerp(currentPosition.y, targetPosition.y, Time.deltaTime),
+        Mathf.Lerp(currentPosition.z, targetPosition.z, Time.deltaTime));
+
+        Camera.transform.localPosition = currentPosition;
+        } 
 
         CharacterController controller = GetComponent<CharacterController>();
          // is the controller on the ground?
@@ -125,8 +139,10 @@ using UnityEngine;
             meshRend.SetActive(start);
         if(start){
             targetAngle= new Vector3(0f, 90f, 0f);
+            targetPosition = new Vector3(3.5f, 0f, -4f);
         }else{
             targetAngle= new Vector3(0f, 0f, 0f);
+            targetPosition = originalPosition;
         }
         return !start;
 
