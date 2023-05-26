@@ -29,9 +29,9 @@ using UnityEngine;
     GameObject meshRend,Camera;
 
 
-    public Vector3 targetAngle = new Vector3(0f, 0f, 0f);
-    public Vector3 targetPosition = new Vector3(0.582796f,1.179629f,-1.670381f);
-    public Vector3 originalPosition = new Vector3(0.582796f,1.179629f,-1.670381f);
+    public Vector3 targetAngle;
+    public Vector3 targetPosition;
+    public Vector3 originalPosition;
      private Vector3 currentAngle;
     private Vector3 currentPosition;
 
@@ -42,6 +42,8 @@ using UnityEngine;
             currentPosition = Camera.transform.localPosition;
         originalPosition = currentPosition;
         targetPosition = originalPosition;
+
+        meshRend.SetActive(false);
     }
      
      // Update is called once per frame
