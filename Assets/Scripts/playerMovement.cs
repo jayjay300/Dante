@@ -84,7 +84,7 @@ using UnityEngine;
 
          if(Input.GetKeyDown(KeyCode.Space)){
 
-            isStartInteraction = ItemInteract(isStartInteraction);
+           // isStartInteraction = BattleScreen(isStartInteraction);
         }
 
          if(Input.GetAxis("Horizontal") > 0){
@@ -137,8 +137,8 @@ using UnityEngine;
      }
 
 
-     bool ItemInteract(bool start){
-            meshRend.SetActive(start);
+     public bool BattleScreen(bool start){
+            //meshRend.SetActive(start);
         if(start){
             targetAngle= new Vector3(0f, 90f, 0f);
             targetPosition = new Vector3(3.5f, 0f, -4f);
@@ -151,6 +151,7 @@ using UnityEngine;
     }
 
     private void OnTriggerEnter(Collider other) {
-      //  meshRend.GetComponent<TextMeshPro>().text = "assbubble toohoot";
+        //  meshRend.GetComponent<TextMeshPro>().text = "assbubble toohoot";
+       // Debug.Log("Fuck fart!");
     }
  }
