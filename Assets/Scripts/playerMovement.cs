@@ -35,6 +35,9 @@ using UnityEngine;
      private Vector3 currentAngle;
     private Vector3 currentPosition;
 
+    [SerializeField]
+    bool rotations;
+
 
     // Use this for initialization
     void Start () {
@@ -45,11 +48,13 @@ using UnityEngine;
 
         meshRend.SetActive(false);
     }
-     
-     // Update is called once per frame
-     void Update () {
 
-       if (currentAngle != targetAngle)
+    // Update is called once per frame
+    void Update()
+    {
+
+if(rotations == true){
+        if (currentAngle != targetAngle)
         {
             currentAngle = new Vector3(
         Mathf.LerpAngle(currentAngle.x, targetAngle.x, Time.deltaTime),
@@ -57,18 +62,20 @@ using UnityEngine;
         Mathf.LerpAngle(currentAngle.z, targetAngle.z, Time.deltaTime));
 
             transform.eulerAngles = currentAngle;
-        } 
+        }
 
-        if(currentPosition != targetPosition){
-    currentPosition = new Vector3(
-        Mathf.Lerp(currentPosition.x, targetPosition.x, Time.deltaTime),
-        Mathf.Lerp(currentPosition.y, targetPosition.y, Time.deltaTime),
-        Mathf.Lerp(currentPosition.z, targetPosition.z, Time.deltaTime));
+        if (currentPosition != targetPosition)
+        {
+            currentPosition = new Vector3(
+                Mathf.Lerp(currentPosition.x, targetPosition.x, Time.deltaTime),
+                Mathf.Lerp(currentPosition.y, targetPosition.y, Time.deltaTime),
+                Mathf.Lerp(currentPosition.z, targetPosition.z, Time.deltaTime));
 
-        Camera.transform.localPosition = currentPosition;
-        } 
+            Camera.transform.localPosition = currentPosition;
+        }
 
-        CharacterController controller = GetComponent<CharacterController>();
+    }
+    CharacterController controller = GetComponent<CharacterController>();
          // is the controller on the ground?
          if (controller.isGrounded) {
              //Feed moveDirection with input.
