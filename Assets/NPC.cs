@@ -8,16 +8,26 @@ public float speed = 1.19f;
 Vector3 pointA;
 Vector3 pointB;
 
-void Start()
+    public bool interact;
+
+    void Start()
 {
-    pointA = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z);
+        interact = false;
+        pointA = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z);
     pointB = new Vector3(transform.localPosition.x+3,transform.localPosition.y, transform.localPosition.z);
 }
 
 void Update()
 {
-    //PingPong between 0 and 1
-    float time = Mathf.PingPong(Time.time * speed, 1);
-    transform.localPosition = Vector3.Lerp(pointA, pointB, time);
-}
+    if(Input.GetKeyDown(KeyCode.Space)){
+            interact = true;
+        }
+        //PingPong between 0 and 1
+
+        if (interact == false)
+        {
+            float time = Mathf.PingPong(Time.time * speed, 1);
+            transform.localPosition = Vector3.Lerp(pointA, pointB, time);
+        }
+    }
 }
